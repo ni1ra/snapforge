@@ -3,10 +3,15 @@
   "rewrites": [
     { "source": "/v1/screenshot", "destination": "/api/screenshot" },
     { "source": "/v1/usage", "destination": "/api/usage" },
+    { "source": "/v1/og-image", "destination": "/api/og-image" },
     { "source": "/health", "destination": "/api/health" }
   ],
   "functions": {
     "api/screenshot.js": {
+      "memory": 1024,
+      "maxDuration": 30
+    },
+    "api/og-image.js": {
       "memory": 1024,
       "maxDuration": 30
     }
