@@ -1,0 +1,94 @@
+{
+  "info": {
+    "name": "SnapForge Screenshot API",
+    "description": "Screenshot any webpage as PNG, JPEG, WebP, or PDF with a single API call.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      { "key": "key", "value": "X-API-Key", "type": "string" },
+      { "key": "value", "value": "{{api_key}}", "type": "string" },
+      { "key": "in", "value": "header", "type": "string" }
+    ]
+  },
+  "variable": [
+    { "key": "base_url", "value": "https://screenshot-api-two-omega.vercel.app" },
+    { "key": "api_key", "value": "your_api_key_here" }
+  ],
+  "item": [
+    {
+      "name": "Take Screenshot (POST)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"url\": \"https://example.com\",\n  \"format\": \"png\",\n  \"width\": 1280,\n  \"height\": 720\n}"
+        },
+        "url": { "raw": "{{base_url}}/v1/screenshot", "host": ["{{base_url}}"], "path": ["v1", "screenshot"] }
+      }
+    },
+    {
+      "name": "Take Screenshot (GET)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/v1/screenshot?url=https://example.com&format=png&width=1280&height=720",
+          "host": ["{{base_url}}"],
+          "path": ["v1", "screenshot"],
+          "query": [
+            { "key": "url", "value": "https://example.com" },
+            { "key": "format", "value": "png" },
+            { "key": "width", "value": "1280" },
+            { "key": "height", "value": "720" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Full Page Dark Mode Screenshot",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"url\": \"https://github.com\",\n  \"format\": \"png\",\n  \"width\": 1440,\n  \"height\": 900,\n  \"full_page\": true,\n  \"dark_mode\": true,\n  \"block_ads\": true\n}"
+        },
+        "url": { "raw": "{{base_url}}/v1/screenshot", "host": ["{{base_url}}"], "path": ["v1", "screenshot"] }
+      }
+    },
+    {
+      "name": "PDF Export",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"url\": \"https://news.ycombinator.com\",\n  \"format\": \"pdf\"\n}"
+        },
+        "url": { "raw": "{{base_url}}/v1/screenshot", "host": ["{{base_url}}"], "path": ["v1", "screenshot"] }
+      }
+    },
+    {
+      "name": "Check Usage",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{base_url}}/v1/usage", "host": ["{{base_url}}"], "path": ["v1", "usage"] }
+      }
+    },
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{base_url}}/health", "host": ["{{base_url}}"], "path": ["health"] }
+      }
+    }
+  ]
+}
