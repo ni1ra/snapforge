@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: snapforge-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    envVars:
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
+      - key: PORT
+        value: 3100
+    healthCheckPath: /health

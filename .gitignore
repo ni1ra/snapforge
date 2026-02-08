@@ -1,0 +1,4 @@
+node_modules/
+.env
+stripe_config.json
+*.log
