@@ -3,6 +3,7 @@
 // Auth: API key validated against Supabase screenshot_subscribers table
 // Billing: Usage tracked per key, enforced by tier limits
 
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { chromium } = require('playwright');
