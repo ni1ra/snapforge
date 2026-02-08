@@ -1,0 +1,9 @@
+{
+  "name": "snapforge",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@sparticuz/chromium": "^133.0.0",
+    "playwright-core": "^1.49.0"
+  }
+}

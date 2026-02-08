@@ -1,0 +1,24 @@
+{
+  "version": 2,
+  "rewrites": [
+    { "source": "/v1/screenshot", "destination": "/api/screenshot" },
+    { "source": "/v1/usage", "destination": "/api/usage" },
+    { "source": "/health", "destination": "/api/health" }
+  ],
+  "functions": {
+    "api/screenshot.js": {
+      "memory": 1024,
+      "maxDuration": 30
+    }
+  },
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, OPTIONS" },
+        { "key": "Access-Control-Allow-Headers", "value": "X-API-Key, Content-Type" }
+      ]
+    }
+  ]
+}
