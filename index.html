@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SnapForge — Screenshot API for Developers</title>
+  <meta name="description" content="Turn any URL into a screenshot with a single API call. PNG, JPEG, PDF. Free tier included.">
+  <meta property="og:title" content="SnapForge — Screenshot API">
+  <meta property="og:description" content="URL to screenshot in one API call. Free 100/month.">
+  <meta property="og:type" content="website">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --border: #1e1e2e;
+      --text: #e0e0e8;
+      --muted: #8888a0;
+      --accent: #6366f1;
+      --accent-hover: #818cf8;
+      --green: #22c55e;
+      --code-bg: #1a1a2e;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, monospace;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+
+    /* Nav */
+    nav {
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+    }
+    nav .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .logo span { color: var(--text); }
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      margin-left: 24px;
+      font-size: 0.9rem;
+    }
+    nav a:hover { color: var(--text); }
+
+    /* Hero */
+    .hero {
+      padding: 80px 0 60px;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .hero h1 .accent { color: var(--accent); }
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 600px;
+      margin: 0 auto 32px;
+    }
+    .cta-row {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-block;
+      padding: 14px 32px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-outline {
+      border: 1px solid var(--border);
+      color: var(--text);
+      background: transparent;
+    }
+    .btn-outline:hover { border-color: var(--muted); }
+
+    /* Code block */
+    .code-section {
+      padding: 40px 0 60px;
+    }
+    .code-block {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      overflow-x: auto;
+      font-size: 0.88rem;
+      line-height: 1.7;
+    }
+    .code-block pre { font-family: 'JetBrains Mono', 'Fira Code', monospace; }
+    .code-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .hl-key { color: #c084fc; }
+    .hl-str { color: #34d399; }
+    .hl-comment { color: #555578; }
+    .hl-fn { color: #60a5fa; }
+
+    /* Features */
+    .features {
+      padding: 60px 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+    }
+    .feature {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+    }
+    .feature h3 {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+    .feature p {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    .feature .icon {
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+    }
+
+    /* Pricing */
+    .pricing {
+      padding: 60px 0;
+      text-align: center;
+    }
+    .pricing h2 {
+      font-size: 2rem;
+      margin-bottom: 40px;
+    }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+    .plan {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px 24px;
+      text-align: left;
+    }
+    .plan.featured { border-color: var(--accent); }
+    .plan-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .plan-price {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .plan-price span { font-size: 1rem; color: var(--muted); font-weight: 400; }
+    .plan-desc {
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin-bottom: 20px;
+    }
+    .plan ul {
+      list-style: none;
+      margin-bottom: 24px;
+    }
+    .plan li {
+      font-size: 0.9rem;
+      padding: 6px 0;
+      color: var(--muted);
+    }
+    .plan li::before {
+      content: "\2713";
+      color: var(--green);
+      margin-right: 8px;
+      font-weight: bold;
+    }
+
+    /* API Docs */
+    .docs {
+      padding: 60px 0;
+    }
+    .docs h2 {
+      font-size: 2rem;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    .endpoint {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+    .endpoint-method {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-right: 8px;
+    }
+    .method-post { background: #22c55e22; color: var(--green); }
+    .method-get { background: #6366f122; color: var(--accent); }
+    .endpoint-path {
+      font-family: monospace;
+      font-size: 0.95rem;
+    }
+    .endpoint p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 0.88rem;
+    }
+    th {
+      text-align: left;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--muted);
+      font-weight: 600;
+    }
+    td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    td code {
+      background: var(--code-bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 0;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 1.8rem; }
+      .plan-price { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <a href="#" class="logo">Snap<span>Forge</span></a>
+    <div>
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#docs">API Docs</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <h1>URL to screenshot.<br><span class="accent">One API call.</span></h1>
+    <p>Render any webpage as PNG, JPEG, or PDF. Full-page captures, dark mode, element selectors, ad blocking. Free tier included.</p>
+    <div class="cta-row">
+      <a href="#pricing" class="btn btn-primary">Get Free API Key</a>
+      <a href="#docs" class="btn btn-outline">View Docs</a>
+    </div>
+  </div>
+</section>
+
+<section class="code-section">
+  <div class="container">
+    <div class="code-label">Try it in 30 seconds</div>
+    <div class="code-block">
+<pre><span class="hl-comment">// Take a screenshot of any URL</span>
+<span class="hl-key">const</span> res = <span class="hl-key">await</span> <span class="hl-fn">fetch</span>(<span class="hl-str">'https://api.snapforge.dev/v1/screenshot'</span>, {
+  <span class="hl-key">method</span>: <span class="hl-str">'POST'</span>,
+  <span class="hl-key">headers</span>: {
+    <span class="hl-str">'X-API-Key'</span>: <span class="hl-str">'your_api_key'</span>,
+    <span class="hl-str">'Content-Type'</span>: <span class="hl-str">'application/json'</span>,
+  },
+  <span class="hl-key">body</span>: JSON.<span class="hl-fn">stringify</span>({
+    <span class="hl-key">url</span>: <span class="hl-str">'https://github.com'</span>,
+    <span class="hl-key">format</span>: <span class="hl-str">'png'</span>,
+    <span class="hl-key">width</span>: 1280,
+    <span class="hl-key">full_page</span>: <span class="hl-key">true</span>,
+    <span class="hl-key">dark_mode</span>: <span class="hl-key">true</span>,
+  }),
+});
+
+<span class="hl-key">const</span> screenshot = <span class="hl-key">await</span> res.<span class="hl-fn">blob</span>();
+<span class="hl-comment">// That's it. Save it, display it, email it.</span></pre>
+    </div>
+  </div>
+</section>
+
+<section class="features" id="features">
+  <div class="feature">
+    <div class="icon">&#9889;</div>
+    <h3>Fast Rendering</h3>
+    <p>Chromium-powered screenshots in under 5 seconds. Full JavaScript execution, lazy-loaded content captured.</p>
+  </div>
+  <div class="feature">
+    <div class="icon">&#127912;</div>
+    <h3>Multiple Formats</h3>
+    <p>PNG, JPEG, or full PDF. Control quality, viewport size, device scale factor, and more.</p>
+  </div>
+  <div class="feature">
+    <div class="icon">&#127763;</div>
+    <h3>Dark Mode</h3>
+    <p>Force dark color scheme via CSS prefers-color-scheme. Perfect for OG images and previews.</p>
+  </div>
+  <div class="feature">
+    <div class="icon">&#128270;</div>
+    <h3>Element Selectors</h3>
+    <p>Screenshot a specific CSS selector instead of the full page. Grab just the hero, a chart, or a component.</p>
+  </div>
+  <div class="feature">
+    <div class="icon">&#128737;</div>
+    <h3>Ad Blocking</h3>
+    <p>Built-in ad and tracker blocking. Clean screenshots without pop-ups, banners, or cookie notices.</p>
+  </div>
+  <div class="feature">
+    <div class="icon">&#128200;</div>
+    <h3>Usage Dashboard</h3>
+    <p>Track your monthly usage via the /v1/usage endpoint. Always know where you stand against your quota.</p>
+  </div>
+</section>
+
+<section class="pricing" id="pricing">
+  <div class="container">
+    <h2>Simple pricing</h2>
+    <div class="pricing-grid">
+      <div class="plan">
+        <div class="plan-name">Free</div>
+        <div class="plan-price">$0 <span>/month</span></div>
+        <div class="plan-desc">For side projects and testing</div>
+        <ul>
+          <li>100 screenshots/month</li>
+          <li>PNG & JPEG formats</li>
+          <li>Max 1280x1024 viewport</li>
+          <li>Dark mode & full page</li>
+        </ul>
+        <a href="mailto:api@snapforge.dev?subject=Free API Key" class="btn btn-outline" style="width:100%;text-align:center;">Get Free Key</a>
+      </div>
+      <div class="plan featured">
+        <div class="plan-name">Starter</div>
+        <div class="plan-price">$17 <span>/month</span></div>
+        <div class="plan-desc">For apps and integrations</div>
+        <ul>
+          <li>1,000 screenshots/month</li>
+          <li>PNG, JPEG & PDF</li>
+          <li>Max 1920x1080 viewport</li>
+          <li>Element selectors</li>
+          <li>Ad blocking</li>
+          <li>Priority rendering</li>
+        </ul>
+        <a href="https://buy.stripe.com/cNi9AS2YffLyfXS70S2Fa2p" id="btn-starter" class="btn btn-primary" style="width:100%;text-align:center;">Subscribe</a>
+      </div>
+      <div class="plan">
+        <div class="plan-name">Pro</div>
+        <div class="plan-price">$49 <span>/month</span></div>
+        <div class="plan-desc">For high-volume workflows</div>
+        <ul>
+          <li>5,000 screenshots/month</li>
+          <li>All formats</li>
+          <li>Max 3840x2160 (4K)</li>
+          <li>3x device scale</li>
+          <li>Everything in Starter</li>
+          <li>Priority support</li>
+        </ul>
+        <a href="https://buy.stripe.com/9B628qeGX42QcLGfxo2Fa2r" id="btn-pro" class="btn btn-outline" style="width:100%;text-align:center;">Subscribe</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="docs" id="docs">
+  <div class="container">
+    <h2>API Reference</h2>
+
+    <div class="endpoint">
+      <span class="endpoint-method method-post">POST</span>
+      <span class="endpoint-path">/v1/screenshot</span>
+      <p>Capture a screenshot of the given URL.</p>
+      <table>
+        <thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>url</code></td><td>string</td><td><em>required</em></td><td>URL to screenshot</td></tr>
+          <tr><td><code>format</code></td><td>string</td><td><code>png</code></td><td><code>png</code>, <code>jpeg</code>, or <code>pdf</code></td></tr>
+          <tr><td><code>width</code></td><td>int</td><td><code>1280</code></td><td>Viewport width (px)</td></tr>
+          <tr><td><code>height</code></td><td>int</td><td><code>800</code></td><td>Viewport height (px)</td></tr>
+          <tr><td><code>full_page</code></td><td>bool</td><td><code>false</code></td><td>Capture full scrollable page</td></tr>
+          <tr><td><code>delay</code></td><td>int</td><td><code>0</code></td><td>Wait ms after load (max 10000)</td></tr>
+          <tr><td><code>selector</code></td><td>string</td><td>-</td><td>CSS selector to capture</td></tr>
+          <tr><td><code>dark_mode</code></td><td>bool</td><td><code>false</code></td><td>Force dark color scheme</td></tr>
+          <tr><td><code>device_scale</code></td><td>float</td><td><code>1</code></td><td>Device scale factor (1-3)</td></tr>
+          <tr><td><code>block_ads</code></td><td>bool</td><td><code>false</code></td><td>Block ads and trackers</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="endpoint">
+      <span class="endpoint-method method-get">GET</span>
+      <span class="endpoint-path">/v1/screenshot?url=...&format=png</span>
+      <p>Same as POST but with query parameters. Convenient for simple integrations and browser testing.</p>
+    </div>
+
+    <div class="endpoint">
+      <span class="endpoint-method method-get">GET</span>
+      <span class="endpoint-path">/v1/usage</span>
+      <p>Check your current monthly usage and remaining quota.</p>
+    </div>
+
+    <div style="margin-top: 24px;">
+      <div class="code-label">Authentication</div>
+      <div class="code-block">
+<pre><span class="hl-comment">// Pass your API key via header (recommended)</span>
+<span class="hl-str">'X-API-Key'</span>: <span class="hl-str">'sf_your_key_here'</span>
+
+<span class="hl-comment">// Or via query parameter</span>
+<span class="hl-str">/v1/screenshot?api_key=sf_your_key_here&url=...</span></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>SnapForge &mdash; Screenshot API for developers. Built with Playwright.</p>
+  </div>
+</footer>
+
+</body>
+</html>
